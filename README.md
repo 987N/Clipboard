@@ -84,7 +84,7 @@ struct ClipboardItem: Codable, Identifiable {
 
 ```swift
 func saveClipboardItems() {
-    let userDefaults = UserDefaults(suiteName: "group.lcl.clipboard")
+    let userDefaults = UserDefaults(suiteName: "group")
 
     if let data = try? JSONEncoder().encode(clipboardItems) {
         userDefaults?.set(data, forKey: "clipboardItems")
