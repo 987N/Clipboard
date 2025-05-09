@@ -41,13 +41,12 @@
 ## App Group 配置
 
 1. 在 Xcode 的主应用和键盘扩展的 Target -> Signing & Capabilities 中，添加同一个 App Group。
-2. 本项目默认使用 `group.lcl.clipboard`。
-3. 在 `Clipboard.entitlements` 和键盘扩展的 entitlements 文件中添加：
+2. 在 `Clipboard.entitlements` 和键盘扩展的 entitlements 文件中添加：
 
 ```xml
 <key>com.apple.security.application-groups</key>
 <array>
-    <string>group.lcl.clipboard</string>
+    <string>group</string>
 </array>
 ```
 
@@ -55,7 +54,7 @@
 
 ## 数据存储说明
 
-- 剪贴板历史内容通过 `UserDefaults(suiteName: "group.lcl.clipboard")` 进行共享。
+- 剪贴板历史内容通过 `UserDefaults(suiteName: "group")` 进行共享。
 - 主应用每次保存内容时会同步写入 App Group。
 - 键盘扩展启动时自动读取 App Group 内容。
 - 键盘扩展仅在显示时检查剪贴板变化，优化性能和电池消耗。
@@ -137,7 +136,7 @@ func deleteItem(item: ClipboardItem) {
 ### 主应用保存内容到 App Group
 
 ```swift
-let userDefaults = UserDefaults(suiteName: "group.lcl.clipboard")
+let userDefaults = UserDefaults(suiteName: "group")
 var history = userDefaults?.stringArray(forKey: "clipboardHistory") ?? []
 history.insert(clipboardString, at: 0)
 userDefaults?.set(history, forKey: "clipboardHistory")
@@ -146,7 +145,7 @@ userDefaults?.set(history, forKey: "clipboardHistory")
 ### 键盘扩展读取内容
 
 ```swift
-let userDefaults = UserDefaults(suiteName: "group.lcl.clipboard")
+let userDefaults = UserDefaults(suiteName: "group")
 let history = userDefaults?.stringArray(forKey: "clipboardHistory") ?? []
 self.datas = history
 self.tableView.reloadData()
@@ -176,7 +175,7 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         lastPasteboardString = currentString
 
         // 保存到App Group
-        let userDefaults = UserDefaults(suiteName: "group.lcl.clipboard")
+        let userDefaults = UserDefaults(suiteName: "group")
         var history = userDefaults?.stringArray(forKey: "clipboardHistory") ?? []
 
         // 避免重复内容
@@ -231,7 +230,3 @@ func updateKeyboardAppearance() {
 - 现在键盘可以显示更多条目，提高了使用效率。
 
 ---
-
-## 联系与反馈
-
-如有问题或建议，请联系开发者：鲁成龙。
